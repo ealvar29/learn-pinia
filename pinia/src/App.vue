@@ -10,7 +10,10 @@ const store = useCounterStore()
     <div class="wrapper">
       <HelloWorld msg="Learn Pinia" />
     </div>
-    <button @click="store.increment()">{{ store.counter}}</button>
+    <button @click="store.increment()">
+      {{ store.counter}} * 2 {{ store.doubleCount}}
+    </button>
+    <button @click="store.$reset">Reset</button>
   </header>
 </template>
 
