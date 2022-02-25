@@ -1,9 +1,46 @@
-export const useBankAccountStore = defineStore('bankAccount', {
-    state: () => {
-        return {
-            balance: 0,
-            transactions: [],
-            
-        }
-    }
-})
+import type { BankDetails } from "@/types/BankDetails";
+import type { Transaction } from "@/types/Transaction";
+import { defineStore } from "pinia";
+
+export const useBankAccountStore = defineStore("bankAccount", {
+  state: () => {
+    return {
+      balance: 0,
+      transactions: [],
+    } as BankDetails;
+  },
+  actions: {
+    charge(amount: number) {
+      const id = Date.now();
+      this.transactions.push({
+        id,
+        type: "charge",
+        amount,
+        status: "pending",
+      });
+      return id;
+    },
+  },
+  getters: {
+    processedTransactions: (state) =>
+      state.transactions.filter((t) => t.status === "processed"),
+    pendingTransactions: (state) =>
+      state.transactions.filter((t) => t.status === "pending"),
+    runningBalance(state): number {
+      return (
+        this.balance +
+        this.processedTransactions
+          .map((t) => t.amount)
+          .reduce((acc, curr) => acc + curr, 0)
+      );
+    },
+    pendingAmount(state): number {
+      return (
+        this.balance +
+        this.pendingTransactions
+          .map((t) => t.amount)
+          .reduce((acc, curr) => acc + curr, 0)
+      );
+    },
+  },
+});
