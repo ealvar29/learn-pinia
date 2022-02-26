@@ -20,6 +20,16 @@ export const useBankAccountStore = defineStore("bankAccount", {
       });
       return id;
     },
+    processTransaction(transactionId: number) {
+      setTimeout(() => {
+        this.transactions = this.transactions.map((t) => {
+          if (t.id === transactionId) {
+            return { ...t, status: "processed" };
+          }
+          return t;
+        });
+      }, 5000);
+    },
   },
   getters: {
     processedTransactions: (state) =>

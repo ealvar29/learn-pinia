@@ -3,6 +3,11 @@ import HelloWorld from "./components/HelloWorld.vue";
 import { useBankAccountStore } from "./stores/bankAccount";
 
 const store = useBankAccountStore();
+store.$onAction(({ name, store, after }) => {
+  after((result) => {
+    if (result && name === "charge") store.processTransaction(result);
+  });
+});
 </script>
 
 <template>
